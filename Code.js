@@ -23,22 +23,31 @@ function dailyEvaluationChangeHandler() {
   SpreadsheetApp.flush();
 
   // only get necessary values to reduce time exceed limit
-  let data = dailySheet.getRange(`B${lastRowFromPrevScan}:K${lastRow}`).getDisplayValues();
+  const data = dailySheet.getRange(`B${lastRowFromPrevScan}:K${lastRow}`).getDisplayValues();
 
   for (let i = 0; i < data.length; i++) {
+    // if date and task both are empty
     if (data[i][0] === "" && data[i][1] !== "") {
       data[i][0] = getReadableTodayDate();
     }
-
+    // if date and task both are not empty
     if (data[i][0] !== "" && data[i][1] !== "") {
+      // if task finished is checked
       if (data[i][3] === "TRUE") {
         data[i][5] = "1";
-        dailySheet.getRange(`B${i + 2}:G${i + 2}`)
+        /*  dailySheet.getRange(`B${i + 2}:G${i + 2}`)
+           .setBackground("#bdbdbd")
+           .setFontLine("line-through"); */
+        dailySheet.getRange(`B${lastRowFromPrevScan + i}:G${lastRowFromPrevScan + i}`)
           .setBackground("#bdbdbd")
           .setFontLine("line-through");
       } else {
         data[i][5] = "-1";
-        dailySheet.getRange(`B${i + 2}:G${i + 2}`)
+        /*  dailySheet.getRange(`B${i + 2}:G${i + 2}`)
+           .setBackground("red")
+           .setFontLine("")
+  */
+        dailySheet.getRange(`B${lastRowFromPrevScan + i}:G${lastRowFromPrevScan + i}`)
           .setBackground("red")
           .setFontLine("")
 
@@ -48,7 +57,7 @@ function dailyEvaluationChangeHandler() {
     // handle toggle
     if (`${data[i][0]}` === getReadableTodayDate() && data[i][1] !== "" && data[i][3] === "FALSE") {
       data[i][5] = "";
-      dailySheet.getRange(`B${i + 2}:G${i + 2}`)
+      dailySheet.getRange(`B${lastRowFromPrevScan + i}:G${lastRowFromPrevScan + i}`)
         .setBackground("")
         .setFontLine("")
 
@@ -57,13 +66,13 @@ function dailyEvaluationChangeHandler() {
     if (data[i][0] !== "") {
       // if date is today
       if (`${data[i][0]}` === getReadableTodayDate()) {
-        dailySheet.getRange(`I${i + 2}:K${i + 2}`)
+        dailySheet.getRange(`I${lastRowFromPrevScan + i}:K${lastRowFromPrevScan + i}`)
           .setBackground("")
 
 
       } else {
         // if date is not today
-        dailySheet.getRange(`I${i + 2}:K${i + 2}`)
+        dailySheet.getRange(`I${lastRowFromPrevScan + i}:K${lastRowFromPrevScan + i}`)
           .setBackground("#bdbdbd")
           .setFontLine("line-through");
       }
@@ -138,7 +147,7 @@ class LastCallDetails {
   }
 
   static set(val = 850) {
-    PropertiesService.getScriptProperties().setProperty("LastRowIndex", String(val));
+    PropertiesService.getScriptProperties().setProperty("LastRowIndex", String(val - 100));
   }
 
 }
