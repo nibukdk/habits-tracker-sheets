@@ -1,15 +1,5 @@
 function hourlyTrigger() {
-
-  // dailyTasksChangeHandler();
   dailyEvaluationChangeHandler();
-  /*  if (e.source.getActiveSheet().getName() === "Daily Tasks") {
-     //SpreadsheetApp.flush();
-   }
- 
-   if (e.source.getActiveSheet().getName() === "Daily Evaluations") {
-    // SpreadsheetApp.flush();
- 
-   } */
 }
 
 function dailyEvaluationChangeHandler() {
@@ -35,18 +25,12 @@ function dailyEvaluationChangeHandler() {
       // if task finished is checked
       if (data[i][3] === "TRUE") {
         data[i][5] = "1";
-        /*  dailySheet.getRange(`B${i + 2}:G${i + 2}`)
-           .setBackground("#bdbdbd")
-           .setFontLine("line-through"); */
+
         dailySheet.getRange(`B${lastRowFromPrevScan + i}:G${lastRowFromPrevScan + i}`)
           .setBackground("#bdbdbd")
           .setFontLine("line-through");
       } else {
         data[i][5] = "-1";
-        /*  dailySheet.getRange(`B${i + 2}:G${i + 2}`)
-           .setBackground("red")
-           .setFontLine("")
-  */
         dailySheet.getRange(`B${lastRowFromPrevScan + i}:G${lastRowFromPrevScan + i}`)
           .setBackground("red")
           .setFontLine("")
@@ -85,59 +69,6 @@ function dailyEvaluationChangeHandler() {
   LastCallDetails.set(lastRow);
 }
 
-/* function dailyTasksChangeHandler() {
-  let sheetName = "Daily Tasks"
-  let tasksSheet = getSpreadsheet(sheetName);
-
-  SpreadsheetApp.flush();
-
-  // add one to last 
-  let lastRow = tasksSheet.getDataRange().getValues().length + 1;
-  let data = tasksSheet.getRange(`B2:C${lastRow}`).getValues();
-  console.log(data)
-  console.log(getReadableTodayDate())
-
-  for (let i = 0; i < data.length; i++) {
-    // if there is tasks
-    if (data[i][1] !== "") {
-      // if date is not empty
-      if (`${data[i][0]}` !== "") {
-        if (`${data[i][0]}` !== getReadableTodayDate()) {
-
-          tasksSheet.getRange(`B${i + 2}:C${i + 2}`)
-            .setBackground("#bdbdbd")
-            .setFontLine("line-through");
-
-        } else {
-          tasksSheet.getRange(`B${i + 2}:C${i + 2}`)
-            .setBackground("")
-            .setFontLine("");
-        }
-        continue;
-      }
-      // if heres tasks but not date
-      else {
-        data[i][0] = getReadableTodayDate();
-        tasksSheet.getRange(`B${i + 2}:C${i + 2}`)
-          .setBackground("")
-          .setFontLine("")
-        continue;
-
-      }
-
-    }
-    // if theres no tasks 
-    else {
-      data[i][0] = "";
-      tasksSheet.getRange(`B${i + 2}:C${i + 2}`)
-        .setBackground("")
-        .setFontLine("")
-    }
-
-  }
-  tasksSheet.getRange(`B2:C${lastRow}`).setValues(data);
-
-} */
 const SPRD_ID = "1OBRNeVBwTUhdub9xPIr8LnDQpow6cse2gqhzx2LrBSI";
 
 
@@ -151,18 +82,3 @@ class LastCallDetails {
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
